@@ -114,9 +114,6 @@ export default function Wordsearch() {
     });
   }
 
-  React.useEffect(() => {
-    console.log(trackSelected);
-  }, [trackSelected]);
 
   React.useEffect(() => {
     if (trackSelected.length > 0) {
