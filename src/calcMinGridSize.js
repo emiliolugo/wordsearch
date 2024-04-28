@@ -5,3 +5,4 @@ function calculateMinGridSize(words) {
     // For vertical orientation, the minimum grid size is the number of words
     return Math.max(maxWordLength, numWords);
 }
+
