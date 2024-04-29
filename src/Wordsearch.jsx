@@ -3,6 +3,7 @@ import { generateWordSearch } from "./generateWordSearch";
 import Letter from "./Letter";
 import Word from "./Word";
 import Timer from "./Timer";
+import { generate, count } from "random-words";
 
 export default function Wordsearch() {
   const [wordCount, setWordCount] = React.useState(0);
@@ -15,19 +16,19 @@ export default function Wordsearch() {
   const [win, setWin] = React.useState(false);
   const [timerStart, setTimerStart] = React.useState(false);
   const [trackSelected, setTrackSelected] = React.useState([]);
-  const [title, setTitle] = React.useState("My Word Search")
+  const [title, setTitle] = React.useState("My Word Search");
+  const [runSearch, setRunSearch] = React.useState(false)
+
 
   // Function to handle form submission for entering the number of words
-  function handleSubmit(event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      const numWords = parseInt(event.currentTarget.elements["num-words"].value);
+  function handleSubmit() {
+      const numWords = parseInt(document.getElementById('num-words').value);
       setWordCount(numWords);
       createWordInputs(numWords);
       const updatedWordArr = Array(numWords).fill(""); // Initialize with empty strings
       setWordArr(updatedWordArr);
       setWordSearchGrid(null); // Reset displayedSearch when form is submitted
-    }
+    
   }
 
   function hasOnlyAlphabeticalLetters(arr) {
@@ -46,8 +47,23 @@ export default function Wordsearch() {
   }
 
   // Function to handle word search generation
-  function handleWordSearch(event) {
+  function createRandomWords(event){
     event.preventDefault();
+    setWordArr(prevWordArr => {
+      const randomWordsArray = generate(prevWordArr.length); // Adjust the options as needed
+      return randomWordsArray;
+    });
+    console.log(wordArr)
+    setRunSearch(prevRunSearch => !prevRunSearch)
+  }
+  React.useEffect(()=>{
+    if(runSearch)
+    {handleWordSearch()}
+  },[runSearch])
+  function handleWordSearch(event) {
+    if(event)
+    {event.preventDefault();}
+    
     if (!hasOnlyAlphabeticalLetters(wordArr)) {
       return alert("please enter only alphabetical characters!");
     }
@@ -93,6 +109,18 @@ export default function Wordsearch() {
       ))
     ) : null;
 
+    function giveUp(){
+      setWordSearchGrid((prevWordSearchGrid) => {
+        return prevWordSearchGrid.map((row) => {
+          return row.map((cell) => {
+            if (!cell.word) return { ...cell, guessed: true };
+            const updatedCell = { ...cell, selected: !cell.selected, guessed: true};
+            return updatedCell;
+          });
+        });
+      });
+    }
+
   function toggleSelected(rowIndex, cellIndex) {
     setWordSearchGrid((prevWordSearchGrid) => {
       return prevWordSearchGrid.map((row, rIndex) => {
@@ -114,6 +142,9 @@ export default function Wordsearch() {
     });
   }
 
+  React.useEffect(() => {
+    console.log(trackSelected);
+  }, [trackSelected]);
 
   React.useEffect(() => {
     if (trackSelected.length > 0) {
@@ -141,11 +172,14 @@ export default function Wordsearch() {
             });
           });
         });
-        setDisplayedWordArr((prevDisplayedWordArr) => {
-          return prevDisplayedWordArr.map((element) =>
-            element.word === guessedWord ? { ...element, guessed: !element.guessed } : element
+        setDisplayedWordArr(prevDisplayedWordArr => {
+          return prevDisplayedWordArr.map(element =>
+            element.word.toLowerCase() === guessedWord.toLowerCase() 
+              ? { ...element, guessed: !element.guessed } 
+              : element
           );
         });
+        
         const newGuessedWords = totalGuessedWords + 1;
         setTotalGuessedWords(newGuessedWords);
         setTrackSelected([]);
@@ -216,6 +250,7 @@ setTimeout(() => {
 
   return (
     <div className="word-search-main">
+      <div className = "spacer-main">
         {!displayedSearch &&(
             <form  className="title-prompt">
             <label className="word-count-label">
@@ -226,12 +261,13 @@ setTimeout(() => {
         )}
       {!displayedSearch && (
         <div className="intro">
-          <form onKeyDown={handleSubmit} className="word-count-prompt">
+          <div className="main-questions">
+          <form className="word-count-prompt">
             <label className="word-count-label">
               Number of Words:<br />
-              <input type="number" name="num-words" className="num-words"/>
+              <input id = "num-words"type="number" name="num-words" className="num-words"/>
             </label>
-            <p className="enter-text">Press enter to submit</p>
+            
           </form>
           <div onChange={(event) => handleDifficulty(event)} className="difficulty">
             <label id="diff-label">Difficulty:</label>
@@ -249,20 +285,34 @@ setTimeout(() => {
                 Hard
               </label>
             </div>
+            </div>
           </div>
+          <button onClick={handleSubmit}  className="create-word-search">Choose Words</button>
         </div>
       )}
+      
 
       {wordCount > 0 && !displayedSearch && (
-        <form className="submit-words" onSubmit={handleWordSearch}>
+        <div className="submit-words">
           <div className="text-boxes">{wordBoxes}</div>
+          <div className = "form-buttons">
+        <form  onSubmit={handleWordSearch}>
+          
 
           <button className="create-word-search" type="submit">
-            Create Word Search
+            Create Custom Search
           </button>
+          
         </form>
+        <form onSubmit={createRandomWords} id = "random-words">
+        <button className="create-word-search" type="submit">
+          Choose Random Words
+        </button>
+        </form>
+        </div>
+        </div>
       )}
-
+</div>
       {displayedSearch && (
         <div className = "word-search-proper">
             <h2>{title}</h2>
@@ -271,13 +321,21 @@ setTimeout(() => {
           </table>
 
           <div id="word-checklist" style={{ margin: "auto", display: "grid", gridTemplateColumns: gridTemplateColumns, width: "60%" }}>
-            {displayedWordArr.map((wordObj) => (
-              <Word key={wordObj.index} word={wordObj.word.toUpperCase()} guessed={wordObj.guessed} />
-            ))}
+          {displayedWordArr
+  .slice() // Create a shallow copy of the array to avoid mutating the original
+  .sort((a, b) => a.word.localeCompare(b.word)) // Sort the array alphabetically based on the word property
+  .map((wordObj) => (
+    <Word key={wordObj.index} word={wordObj.word.toUpperCase()} guessed={wordObj.guessed} />
+  ))}
           </div>
+          <div  className = "ws-buttons">
           <button className="create-word-search" onClick={()=> location.reload()}>
             Create New Word Search
           </button>
+          <button className="create-word-search" onClick={giveUp}>
+            Give Up
+          </button>
+          </div>
         </div>
       )}
 
