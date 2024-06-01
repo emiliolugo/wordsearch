@@ -3,7 +3,7 @@ import { generateWordSearch } from "./generateWordSearch";
 import Letter from "./Letter";
 import Word from "./Word";
 import Timer from "./Timer";
-import { generate, count } from "random-words";
+import { generate } from "random-words";
 
 export default function Wordsearch() {
   const [wordCount, setWordCount] = React.useState(0);
@@ -17,18 +17,17 @@ export default function Wordsearch() {
   const [timerStart, setTimerStart] = React.useState(false);
   const [trackSelected, setTrackSelected] = React.useState([]);
   const [title, setTitle] = React.useState("My Word Search");
-  const [runSearch, setRunSearch] = React.useState(false)
-
+  const [runSearch, setRunSearch] = React.useState(false);
 
   // Function to handle form submission for entering the number of words
-  function handleSubmit() {
-      const numWords = parseInt(document.getElementById('num-words').value);
-      setWordCount(numWords);
-      createWordInputs(numWords);
-      const updatedWordArr = Array(numWords).fill(""); // Initialize with empty strings
-      setWordArr(updatedWordArr);
-      setWordSearchGrid(null); // Reset displayedSearch when form is submitted
-    
+  function handleSubmit(event) {
+    event.preventDefault();
+    const numWords = parseInt(document.getElementById("num-words").value);
+    setWordCount(numWords);
+    createWordInputs(numWords);
+    const updatedWordArr = Array(numWords).fill(""); // Initialize with empty strings
+    setWordArr(updatedWordArr);
+    setWordSearchGrid(null); // Reset displayedSearch when form is submitted
   }
 
   function hasOnlyAlphabeticalLetters(arr) {
@@ -47,25 +46,29 @@ export default function Wordsearch() {
   }
 
   // Function to handle word search generation
-  function createRandomWords(event){
+  function createRandomWords(event) {
     event.preventDefault();
-    setWordArr(prevWordArr => {
+    setWordArr((prevWordArr) => {
       const randomWordsArray = generate(prevWordArr.length); // Adjust the options as needed
       return randomWordsArray;
     });
-    console.log(wordArr)
-    setRunSearch(prevRunSearch => !prevRunSearch)
+    console.log(wordArr);
+    setRunSearch((prevRunSearch) => !prevRunSearch);
   }
-  React.useEffect(()=>{
-    if(runSearch)
-    {handleWordSearch()}
-  },[runSearch])
+
+  React.useEffect(() => {
+    if (runSearch) {
+      handleWordSearch();
+    }
+  }, [runSearch]);
+
   function handleWordSearch(event) {
-    if(event)
-    {event.preventDefault();}
-    
+    if (event) {
+      event.preventDefault();
+    }
+
     if (!hasOnlyAlphabeticalLetters(wordArr)) {
-      return alert("please enter only alphabetical characters!");
+      return alert("Please enter only alphabetical characters!");
     }
 
     let gridSize = Math.max(wordArr.length, Math.max(...wordArr.map((word) => word.length)));
@@ -109,17 +112,17 @@ export default function Wordsearch() {
       ))
     ) : null;
 
-    function giveUp(){
-      setWordSearchGrid((prevWordSearchGrid) => {
-        return prevWordSearchGrid.map((row) => {
-          return row.map((cell) => {
-            if (!cell.word) return { ...cell, guessed: true };
-            const updatedCell = { ...cell, selected: !cell.selected, guessed: true};
-            return updatedCell;
-          });
+  function giveUp() {
+    setWordSearchGrid((prevWordSearchGrid) => {
+      return prevWordSearchGrid.map((row) => {
+        return row.map((cell) => {
+          if (!cell.word) return { ...cell, guessed: true };
+          const updatedCell = { ...cell, selected: !cell.selected, guessed: true };
+          return updatedCell;
         });
       });
-    }
+    });
+  }
 
   function toggleSelected(rowIndex, cellIndex) {
     setWordSearchGrid((prevWordSearchGrid) => {
@@ -172,14 +175,14 @@ export default function Wordsearch() {
             });
           });
         });
-        setDisplayedWordArr(prevDisplayedWordArr => {
-          return prevDisplayedWordArr.map(element =>
-            element.word.toLowerCase() === guessedWord.toLowerCase() 
-              ? { ...element, guessed: !element.guessed } 
+        setDisplayedWordArr((prevDisplayedWordArr) => {
+          return prevDisplayedWordArr.map((element) =>
+            element.word.toLowerCase() === guessedWord.toLowerCase()
+              ? { ...element, guessed: !element.guessed }
               : element
           );
         });
-        
+
         const newGuessedWords = totalGuessedWords + 1;
         setTotalGuessedWords(newGuessedWords);
         setTrackSelected([]);
@@ -200,15 +203,14 @@ export default function Wordsearch() {
           });
         });
         setWin(true);
-        document.getElementById('win-screen').classList.add('slide-down');
+        document.getElementById("win-screen").classList.add("slide-down");
         // Select the element with the class 'word-search-proper' after a delay
-setTimeout(() => {
-    const wordSearchProper = document.querySelector('.word-search-proper');
-    // Apply the blur effect
-    wordSearchProper.style.filter = "blur(5px)";
-  }, 500); // Delay
-  
-    }
+        setTimeout(() => {
+          const wordSearchProper = document.querySelector(".word-search-proper");
+          // Apply the blur effect
+          wordSearchProper.style.filter = "blur(5px)";
+        }, 500); // Delay
+      }
     }
   }
 
@@ -220,7 +222,11 @@ setTimeout(() => {
         <div className="text-box" key={i}>
           <label className="word-label">
             Word {i + 1}:
-            <input type="text" name={`word-${i}`} onChange={(event) => handleInputChange(event, i)} />
+            <input
+              type="text"
+              name={`word-${i}`}
+              onChange={(event) => handleInputChange(event, i)}
+            />
           </label>
         </div>
       );
@@ -231,7 +237,11 @@ setTimeout(() => {
   // Function to handle changes in word inputs
   function handleInputChange(event, index) {
     setWordArr((prevWordArr) => {
-      return [...prevWordArr.slice(0, index), event.target.value, ...prevWordArr.slice(index + 1)];
+      return [
+        ...prevWordArr.slice(0, index),
+        event.target.value,
+        ...prevWordArr.slice(index + 1),
+      ];
     });
   }
 
@@ -242,114 +252,142 @@ setTimeout(() => {
 
   const gridTemplateColumns = `repeat(${wordArr.length < 4 ? wordArr.length : 4}, 1fr)`;
 
-  function handleTitle(event){
-    setTitle(event.target.value)
+  function handleTitle(event) {
+    setTitle(event.target.value);
   }
-
-
 
   return (
     <div className="word-search-main">
-      <div className = "spacer-main">
-        {!displayedSearch &&(
-            <form  className="title-prompt">
+      <div className="spacer-main">
+        {!displayedSearch && (
+          <form className="title-prompt">
             <label className="word-count-label">
-              Enter A Wordsearch Title<br></br>
-              <input onChange={(event) =>handleTitle(event)} type="text" name="word-title" className="word-title" autoFocus />
+              Enter A Wordsearch Title
+              <br></br>
+              <input
+                onChange={(event) => handleTitle(event)}
+                type="text"
+                name="word-title"
+                className="word-title"
+                autoFocus
+              />
             </label>
           </form>
         )}
-      {!displayedSearch && (
-        <div className="intro">
-          <div className="main-questions">
-          <form className="word-count-prompt">
-            <label className="word-count-label">
-              Number of Words:<br />
-              <input id = "num-words"type="number" name="num-words" className="num-words"/>
-            </label>
-            
-          </form>
-          <div onChange={(event) => handleDifficulty(event)} className="difficulty">
-            <label id="diff-label">Difficulty:</label>
-            <div className="difficulty-radio">
-              <label className="diff-labels">
-                <input type="radio" value="Easy" name="difficulty" defaultChecked />
-                Easy
-              </label>
-              <label className="diff-labels">
-                <input type="radio" value="Medium" name="difficulty" />
-                Medium
-              </label>
-              <label className="diff-labels">
-                <input type="radio" value="Hard" name="difficulty" />
-                Hard
-              </label>
-            </div>
+        {!displayedSearch && (
+          <div className="intro">
+            <div className="main-questions">
+              <form className="word-count-prompt" onSubmit={handleSubmit}>
+                <label className="word-count-label">
+                  Number of Words:<br />
+                  <input
+                    id="num-words"
+                    type="number"
+                    name="num-words"
+                    className="num-words"
+                  />
+                </label>
+                <div
+                  onChange={(event) => handleDifficulty(event)}
+                  className="difficulty"
+                >
+                  <label id="diff-label">Difficulty:</label>
+                  <div className="difficulty-radio">
+                    <label className="diff-labels">
+                      <input
+                        type="radio"
+                        value="Easy"
+                        name="difficulty"
+                        defaultChecked
+                      />
+                      Easy
+                    </label>
+                    <label className="diff-labels">
+                      <input type="radio" value="Medium" name="difficulty" />
+                      Medium
+                    </label>
+                    <label className="diff-labels">
+                      <input type="radio" value="Hard" name="difficulty" />
+                      Hard
+                    </label>
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className="create-word-search"
+                >
+                  Choose Words
+                </button>
+              </form>
             </div>
           </div>
-          <button onClick={handleSubmit}  className="create-word-search">Choose Words</button>
-        </div>
-      )}
-      
+        )}
 
-      {wordCount > 0 && !displayedSearch && (
-        <div className="submit-words">
-          <div className="text-boxes">{wordBoxes}</div>
-          <div className = "form-buttons">
-        <form  onSubmit={handleWordSearch}>
-          
-
-          <button className="create-word-search" type="submit">
-            Create Custom Search
-          </button>
-          
-        </form>
-        <form onSubmit={createRandomWords} id = "random-words">
-        <button className="create-word-search" type="submit">
-          Choose Random Words
-        </button>
-        </form>
-        </div>
-        </div>
-      )}
-</div>
+        {wordCount > 0 && !displayedSearch && (
+          <div className="submit-words">
+            <div className="text-boxes">{wordBoxes}</div>
+            <div className="form-buttons">
+              <form onSubmit={handleWordSearch}>
+                <button className="create-word-search" type="submit">
+                  Create Custom Search
+                </button>
+              </form>
+              <form onSubmit={createRandomWords}>
+                <button className="create-word-search" type="submit">
+                  Choose Random Words
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
       {displayedSearch && (
-        <div className = "word-search-proper">
-            <h2>{title}</h2>
+        <div className="word-search-proper">
+          <h2>{title}</h2>
           <table className="displayed-word-search">
             <tbody>{displayedSearch}</tbody>
           </table>
 
-          <div id="word-checklist" style={{ margin: "auto", display: "grid", gridTemplateColumns: gridTemplateColumns, width: "60%" }}>
-          {displayedWordArr
-  .slice() // Create a shallow copy of the array to avoid mutating the original
-  .sort((a, b) => a.word.localeCompare(b.word)) // Sort the array alphabetically based on the word property
-  .map((wordObj) => (
-    <Word key={wordObj.index} word={wordObj.word.toUpperCase()} guessed={wordObj.guessed} />
-  ))}
+          <div
+            id="word-checklist"
+            style={{
+              margin: "auto",
+              display: "grid",
+              gridTemplateColumns: gridTemplateColumns,
+              width: "60%",
+            }}
+          >
+            {displayedWordArr
+              .slice() // Create a shallow copy of the array to avoid mutating the original
+              .sort((a, b) => a.word.localeCompare(b.word)) // Sort the array alphabetically based on the word property
+              .map((wordObj) => (
+                <Word
+                  key={wordObj.index}
+                  word={wordObj.word.toUpperCase()}
+                  guessed={wordObj.guessed}
+                />
+              ))}
           </div>
-          <div  className = "ws-buttons">
-          <button className="create-word-search" onClick={()=> location.reload()}>
-            Create New Word Search
-          </button>
-          <button className="create-word-search" onClick={giveUp}>
-            Give Up
-          </button>
+          <div className="ws-buttons">
+            <button className="create-word-search" onClick={() => location.reload()}>
+              Create New Word Search
+            </button>
+            <button className="create-word-search" onClick={giveUp}>
+              Give Up
+            </button>
           </div>
         </div>
       )}
 
-        <div id="win-screen" style = {{display: win?"block":"none"}}>
-            <h1>Congratulations, you win!</h1>
-            <p>Final Time:</p>
-          <Timer win={win} start={timerStart} />
-          <br></br>
-          <button 
-          className="create-word-search" onClick={()=> location.reload()}>
-            Create New Word Search
-          </button>
-        </div>
-      
+      <div id="win-screen" style={{ display: win ? "block" : "none" }}>
+        <h1>Congratulations, you win!</h1>
+        <p>Final Time:</p>
+        <Timer win={win} start={timerStart} />
+        <br></br>
+        <button className="create-word-search" onClick={() => location.reload()}>
+          Create New Word Search
+        </button>
+      </div>
     </div>
   );
 }
