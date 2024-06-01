@@ -3,37 +3,28 @@ body{
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #3C3C3C;
+  background: #fff;
   color: white;
 
 }
 .header{
-  margin-top: 2%;
-  display: flex;
-  align-items: center;
-  text-align: center;
+  background-color: #fff;
+  padding-bottom: 1%;
+  color: rgb(45, 44, 44);
+  margin: auto;
 }
-span{
+.title{
+  margin-top: 5%;
+  margin-left: 4%;
+}
 
-  border-style: solid;
-  border-bottom: 10px;
-}
-#hr1{
-  margin-right: auto;
-  width: 50%;
-}
-#hr2{
-  margin-left: auto;
-  width: 15%;
-}
 .intro
 {
-  border-radius: 20px;
-  padding: 5%;
-  background-color: #07657c;
-  
-  filter: drop-shadow(0 0 0.4rem #032f39);
+  color: rgb(45, 44, 44);
+}
 
+.intro > h2{
+  margin-left: 4%;
 }
 
 .intro > button{
@@ -41,10 +32,13 @@ span{
   background-color: #E91E63;
 }
 
-.intro > button:hover{
+button:hover{
   transform: translateY(-1px);
   background-color: #c91853;
   border-color :#c91853;
+}
+.intro > h1{
+  font-size: 1.5rem;
 }
 .form-buttons{
   display: flex;
@@ -52,57 +46,32 @@ justify-content: space-around;
 }
 .ws-buttons > button{
   width: 40%;
-  font-size: auto;
+  font-size: 1rem;
+
 }
 .ws-buttons{
+  padding-top: 2%;
   display: flex;
   justify-content: space-around;
   margin: auto;
-  width: 50%;
-}
-.main-questions{
-  display: flex;
-  justify-content: center;
-  align-items: start;
+  width: 40%;
+
 }
 
 
-.word-search-main{
-  text-align: center;
-  margin-right: 5%;
-  margin-left: 5%;
-  border-radius: 6px;
-  padding: 5%;
-  
-}
+
 .spacer-main{
-  width: 75%;
   margin: auto;
 }
-.word-count-prompt{
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 2%;
-  width: 50%;
 
-}
 input{
   border-style: solid;
   border-color: lightgrey;
 }
-input[type=text] {
-	appearance: none;
-	border: none;
-	outline: none;
-	border-bottom: .2em solid #E91E63;
-	background: rgba(#E91E63, .2);
-	border-radius: .2em .2em 0 0;
-	padding: .4em;
-	color: #E91E63;
-}
+
 .diff-labels{
   display: flex;
-  margin-bottom: 20%;
+  margin-bottom: 1%;
 
 }
 input[type=radio] {
@@ -133,8 +102,27 @@ input[type=radio] {
 	}
 }
 .word-count-label{
+  margin-left: 4%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+
+}
+.word-title-label{
+
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+
+}
+h2{
   font-size: 1.5rem;
   font-weight: 600;
+}
+.word-count-label > p
+{
+  font-size: 1rem;
+  font-weight: 400;
 }
 
 
@@ -148,26 +136,23 @@ input[type=radio] {
 
 .num-words{
   text-align: center;
-  width: 30%;
-  font-size: 4rem;
-  width: 15%;
-  margin: 5%;
-  border-color: #E91E63; 
-  border: none;
-  border-radius: 10px;
-	border-bottom: .04em solid #E91E63;
-background-color: #075c71;
-	padding: .4em;
-	color: #E91E63;
+  border-style: solid;
+  width: 20%;
+  margin-top: 2%;
+  font-size: 5rem;
+    appearance: none;
+    border: none;
+    outline: none;
+    border-bottom: .05em solid #E91E63;
+    background: rgba(#E91E63, .2);
+    padding: .01em;
+    color: #E91E63;
+  
 }
 .submit-words{
   background-color: white;
   color: black;
-  margin-top: 5%;
   padding: 10%;
-  border-radius: 20px;
-  border-style: solid;
-  border-color: #E91E63;
   animation: slideDown 0.5s ease forwards;
 
 }
@@ -234,6 +219,8 @@ input[type="number"] {
 }
 
 .text-box{
+  display: flex;
+
   text-align: center;
 
 }
@@ -253,30 +240,47 @@ input[type="number"] {
   gap: 1em;
   
 }
+input[type="text"] {
+  appearance: none;
+  border: none;
+  outline: none;
+  border-bottom: .2em solid #E91E63;
+  border-radius: .2em .2em 0 0;
+  padding: .4em;
+  color: #E91E63;
+}
+input[type="text"]:focus {
+  background-color: #dfdede;
+}
+
 
 .difficulty-radio{
-  margin: auto;
   padding: 5%;
 
 }
-
 .difficulty{
-  width: 50%;
-  display: flex;
-  flex-direction: column;
+  margin-top: 3%;
+  padding-left: 4%;
+  padding-top: 3%;
+  background-color: #f0efef;
 }
 
+
+
 .displayed-word-search{
-  padding-bottom: 4%;
+  padding-bottom: 2%;
   margin: auto;
 }
 
 #diff-label{
-  font-weight: 600;
-  font-size: 1.5rem;
+  font-weight: 400;
+  font-size: 1rem;
 }
 
-
+.word-label{
+  display: flex;
+  flex-direction: column;
+}
 
 .letter{
   border: none;
@@ -292,15 +296,19 @@ input[type="number"] {
   text-shadow: gray 1px 0 10px;}
 .create-word-search{
 
-  align-items: center;
-  appearance: none;
 	border: .2em solid #E91E63;
-	background: hsl(0 0 0/0);
+	background: #E91E63;
 	padding: .85em 1.5em;
-	color: #E91E63;
+	color: #ffffff;
 	border-radius: 2em;
 	transition: .5s;
 
+}
+.wrd-srch-btn{
+  display: flex;
+  justify-content: space-evenly;
+
+  padding-bottom: 3%;
 }
 .alt-btn{
   align-items: center;
@@ -333,37 +341,53 @@ input[type="number"] {
 }
 
 #word-checklist{
-  gap: 4%;
-  margin: auto;
+  
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(auto-fill, 25%);
   width: 60%;
+  text-align: center;
 }
 
 .footer{
   text-align: center;
   margin-bottom: 2%;
   margin-top: 7%;
+  color: black;
 }
 
 .title-prompt{
-  background-color: rgb(241, 241, 33);
-  filter: drop-shadow(0 0 0.16rem #E91E63);
-
-  color: black;
+  background-color: #f0efef;
+  color: rgb(27, 27, 27);
   padding: 1%;
-  margin-bottom: 2%;
-  border-radius: 20px;
+  padding-bottom: 3%;
+  padding-left: 4%;
+
+
 }
 
 .word-title{
-  width: 80%;
-  background-color: rgba(241, 241, 33, 0.848);
-
+  border-style: solid;
+  width: 20%;
+  background-color: #f0efef;
+    appearance: none;
+    border: none;
+    outline: none;
+    border-bottom: .2em solid #E91E63;
+    background: rgba(#E91E63, .2);
+    border-radius: .2em .2em 0 0;
+    padding: .4em;
+    color: #E91E63;
+    
+  
 }
 .word-title:focus{
-  background-color: rgba(212, 212, 26, 0.848);
+  background-color: rgba(214, 214, 214, 0.848);
+}
+
+.num-words:focus{
+  background-color: rgba(214, 214, 214, 0.848);
+  border-radius: 6px;
 }
 @media screen and (max-width: 600px) {
   html, body {
@@ -372,19 +396,29 @@ input[type="number"] {
   body {
     position: relative;
   }
+  letter{
+    font-size: auto;
+  }
 }
-.top-text > *{
-  margin: 0;
+.top-text{
+  margin: auto;
+
 }
 
 .word-search-proper{
-  width: 100%;
+
   background-color: white;
-  padding-top: 10%;
   padding-bottom: 10%;
   color: black;
-  border-radius: 20px;
-  filter: drop-shadow(0 0 0.75rem rgb(0, 0, 0));
+  margin-top: 2%;
+  
 }
+.wrd-srch-title{
+
+  display: flex;
+  justify-content: center;
+  padding-bottom: 2%;
+}
+
 
 

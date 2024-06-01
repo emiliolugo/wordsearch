@@ -48,6 +48,11 @@ export default function Wordsearch() {
   // Function to handle word search generation
   function createRandomWords(event) {
     event.preventDefault();
+    event.preventDefault();
+    const numWords = parseInt(document.getElementById("num-words").value);
+    setWordCount(numWords);
+    const updatedWordArr = Array(numWords).fill(""); // Initialize with empty strings
+    setWordArr(updatedWordArr);
     setWordArr((prevWordArr) => {
       const randomWordsArray = generate(prevWordArr.length); // Adjust the options as needed
       return randomWordsArray;
@@ -222,6 +227,7 @@ export default function Wordsearch() {
         <div className="text-box" key={i}>
           <label className="word-label">
             Word {i + 1}:
+            
             <input
               type="text"
               name={`word-${i}`}
@@ -261,9 +267,10 @@ export default function Wordsearch() {
       <div className="spacer-main">
         {!displayedSearch && (
           <form className="title-prompt">
-            <label className="word-count-label">
-              Enter A Wordsearch Title
-              <br></br>
+            <label className="word-title-label">
+              <h2>Step 1</h2>
+              <p>Enter A Wordsearch Title</p>
+              
               <input
                 onChange={(event) => handleTitle(event)}
                 type="text"
@@ -276,10 +283,10 @@ export default function Wordsearch() {
         )}
         {!displayedSearch && (
           <div className="intro">
-            <div className="main-questions">
+            <h2>Step 2</h2>              
               <form className="word-count-prompt" onSubmit={handleSubmit}>
                 <label className="word-count-label">
-                  Number of Words:<br />
+                  Enter Number of Words<br></br>
                   <input
                     id="num-words"
                     type="number"
@@ -291,7 +298,8 @@ export default function Wordsearch() {
                   onChange={(event) => handleDifficulty(event)}
                   className="difficulty"
                 >
-                  <label id="diff-label">Difficulty:</label>
+                  <h2>Step 3</h2>
+                  <label id="diff-label">Choose a Difficulty</label>
                   <div className="difficulty-radio">
                     <label className="diff-labels">
                       <input
@@ -300,26 +308,33 @@ export default function Wordsearch() {
                         name="difficulty"
                         defaultChecked
                       />
-                      Easy
+                      &#160;Easy
                     </label>
                     <label className="diff-labels">
                       <input type="radio" value="Medium" name="difficulty" />
-                      Medium
+                      &#160;Medium
                     </label>
                     <label className="diff-labels">
                       <input type="radio" value="Hard" name="difficulty" />
-                      Hard
+                      &#160;Hard
                     </label>
                   </div>
-                </div>
-                <button
+                  <div className="wrd-srch-btn">
+                  <button
                   type="submit"
                   className="create-word-search"
                 >
                   Choose Words
                 </button>
+                
+                <button className="create-word-search" onClick={createRandomWords}  >
+                 Random Words
+                </button>
+              
+                </div>
+                </div>
+                
               </form>
-            </div>
           </div>
         )}
 
@@ -332,18 +347,16 @@ export default function Wordsearch() {
                   Create Custom Search
                 </button>
               </form>
-              <form onSubmit={createRandomWords}>
-                <button className="create-word-search" type="submit">
-                  Choose Random Words
-                </button>
-              </form>
+              
             </div>
           </div>
         )}
       </div>
       {displayedSearch && (
         <div className="word-search-proper">
-          <h2>{title}</h2>
+          <div className="wrd-srch-title">
+          <h2 >{title}</h2>
+          </div>
           <table className="displayed-word-search">
             <tbody>{displayedSearch}</tbody>
           </table>
@@ -370,7 +383,7 @@ export default function Wordsearch() {
           </div>
           <div className="ws-buttons">
             <button className="create-word-search" onClick={() => location.reload()}>
-              Create New Word Search
+              New Word Search
             </button>
             <button className="create-word-search" onClick={giveUp}>
               Give Up
