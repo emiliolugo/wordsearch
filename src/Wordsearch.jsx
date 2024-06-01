@@ -254,9 +254,18 @@ export default function Wordsearch() {
   // Function to handle difficulty selection
   function handleDifficulty(event) {
     setDifficulty(event.target.value);
+    
   }
 
-  const gridTemplateColumns = `repeat(${wordArr.length < 4 ? wordArr.length : 4}, 1fr)`;
+  React.useEffect(() => {
+    setDifficulty(difficulty);
+    console.log(difficulty)
+  }, [difficulty]);
+  const mediaQuery = window.matchMedia('(max-width: 600px)');
+  let numcols = 4
+  if (mediaQuery.matches) {
+    numcols = 2}
+  const gridTemplateColumns = `repeat(${wordArr.length < numcols ? wordArr.length : numcols}, 1fr)`;
 
   function handleTitle(event) {
     setTitle(event.target.value);
@@ -340,7 +349,13 @@ export default function Wordsearch() {
 
         {wordCount > 0 && !displayedSearch && (
           <div className="submit-words">
-            <div className="text-boxes">{wordBoxes}</div>
+            <div className="text-boxes"
+            style={{
+              margin: "auto",
+              display: "grid",
+              gridTemplateColumns: gridTemplateColumns,
+              width: "60%",
+            }}>{wordBoxes}</div>
             <div className="form-buttons">
               <form onSubmit={handleWordSearch}>
                 <button className="create-word-search" type="submit">

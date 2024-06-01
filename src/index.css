@@ -241,7 +241,7 @@ input[type="number"] {
   margin: auto;
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(auto-fill, 25%);
+  grid-template-columns: repeat(auto-fill, 50%);
   padding-bottom: 10%;
   gap: 1em;
   
@@ -404,6 +404,14 @@ input[type="text"]:focus {
   }
   letter{
     font-size: auto;
+  }
+  #word-checklist{
+  
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, 50%);
+    width: 60%;
+    text-align: center;
   }
 }
 .top-text{
