@@ -13,9 +13,15 @@ body{
   color: rgb(45, 44, 44);
   margin: auto;
 }
-.title{
+.header{
   margin-top: 5%;
   margin-left: 4%;
+}
+
+.header > p {
+
+  font-size: 0.6rem;
+  color: rgb(83, 83, 83);
 }
 
 .intro
